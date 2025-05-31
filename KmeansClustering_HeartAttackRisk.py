@@ -18,9 +18,9 @@ except Exception as e:
     st.error(f"❌ Terjadi error saat membaca file: {e}")
     st.stop()
 
-# Ubah Blood Pressure dari float ke integer (jika kolom ada)
+
 if 'Blood Pressure' in df.columns:
-    df['Blood Pressure'] = df['Blood Pressure'].astype(int)
+    df['Blood Pressure'] = df['Blood Pressure'].astype(str).str.extract(r'(\d+)', expand=False).astype(int)
 
 
 # Tampilkan data
