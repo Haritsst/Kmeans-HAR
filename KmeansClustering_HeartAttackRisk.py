@@ -22,6 +22,10 @@ except Exception as e:
 if 'Blood Pressure' in df.columns:
     df['Blood Pressure'] = df['Blood Pressure'].astype(str).str.extract(r'(\d+)', expand=False).astype(int)
 
+df = df.select_dtypes(exclude=['object'])
+binary_cols = [col for col in df.columns if df[col].nunique() == 2]
+df = df.drop(columns=binary_cols)
+
 
 # Tampilkan data
 st.subheader("Data Preview")
