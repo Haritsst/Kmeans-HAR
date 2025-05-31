@@ -23,7 +23,6 @@ if 'Blood Pressure' in df.columns:
     df['Blood Pressure'] = df['Blood Pressure'].astype(str).str.extract(r'(\d+)', expand=False).astype(int)
 
 
-
 # Tampilkan data
 st.subheader("Data Preview")
 st.write(df.head())
@@ -31,6 +30,10 @@ st.write(df.head())
 # Hapus baris dengan Heart Attack Risk == 0 jika kolom tersedia
 if 'Heart Attack Risk' in df.columns:
     df = df[df['Heart Attack Risk'] != 0]
+
+df = df.select_dtypes(exclude=['object'])
+binary_cols = [col for col in df.columns if df[col].nunique() == 2]
+df = df.drop(columns=binary_cols)
 
 # Pilih fitur
 features = st.multiselect(
@@ -48,11 +51,6 @@ if features:
 
     # Slider jumlah klaster
     n_clusters = st.slider("Pilih jumlah klaster (K)", min_value=2, max_value=10, value=3)
-
-    df = df.select_dtypes(exclude=['object'])
-    binary_cols = [col for col in df.columns if df[col].nunique() == 2]
-    df = df.drop(columns=binary_cols)
-
 
     # KMeans clustering
     kmeans = KMeans(n_clusters=n_clusters, random_state=42)
