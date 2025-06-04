@@ -39,7 +39,7 @@ df = df.drop(columns=binary_cols)
 features = st.multiselect(
     "Pilih fitur untuk clustering",
     df.columns.tolist(),
-    default=df.columns.tolist()
+    default=[] 
 )
 
 if features:
@@ -71,6 +71,10 @@ if features:
         st.pyplot(fig)
     else:
         st.warning("Pilih minimal 2 fitur untuk visualisasi 2D.")
+
+    # Deskripsi klaster
+    st.subheader("Deskripsi Statistik per Klaster")
+    st.write(df.groupby("Cluster")[features].describe().T)
 
     # Tampilkan hasil clustering
     st.subheader("Data dengan Label Klaster")
