@@ -73,8 +73,12 @@ if features:
         st.warning("Pilih minimal 2 fitur untuk visualisasi 2D.")
 
     # Deskripsi klaster
-    st.subheader("Deskripsi Statistik per Klaster")
-    st.write(df.groupby("Cluster")[features].describe().T)
+    st.subheader("Deskripsi Statistik per Klaster (Per Fitur)")
+
+    for feature in features:
+        st.markdown(f"#### Statistik untuk Fitur: `{feature}`")
+        desc = df.groupby("Cluster")[feature].describe()
+        st.write(desc)
 
     # Tampilkan hasil clustering
     st.subheader("Data dengan Label Klaster")
