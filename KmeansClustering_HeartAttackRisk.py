@@ -59,19 +59,50 @@ if features:
     # Tambahkan label klaster ke dataframe
     df["Cluster"] = clusters
 
-    # Visualisasi
-    st.subheader("Visualisasi Clustering")
+    # --- PCA Visualization Section ---
+    st.subheader("PCA Cluster Visualization")
     if len(features) >= 2:
-        fig, ax = plt.subplots()
-        sns.scatterplot(
-            x=X_scaled[:, 0], y=X_scaled[:, 1], hue=clusters, palette="Set1", ax=ax
+        # Apply PCA to reduce dimensions to 2
+        pca = PCA(n_components=2)
+        principal_components = pca.fit_transform(X_scaled)
+        
+        # Create a DataFrame for the principal components for easy plotting
+        pca_df = pd.DataFrame(
+            data=principal_components, 
+            columns=['Principal Component 1', 'Principal Component 2']
         )
-        ax.set_xlabel(features[0])
-        ax.set_ylabel(features[1])
-        st.pyplot(fig)
-    else:
-        st.warning("Pilih minimal 2 fitur untuk visualisasi 2D.")
+        pca_df['Cluster'] = clusters
 
+        # Create the scatter plot
+        fig, ax = plt.subplots(figsize=(10, 8))
+        sns.scatterplot(
+            x='Principal Component 1', 
+            y='Principal Component 2', 
+            hue='Cluster', 
+            palette="viridis", 
+            data=pca_df, 
+            ax=ax,
+            s=100, # Increase point size
+            alpha=0.7 # Add transparency
+        )
+        
+        ax.set_title("Cluster Visualization with PCA", fontsize=16)
+        ax.set_xlabel("Principal Component 1", fontsize=12)
+        ax.set_ylabel("Principal Component 2", fontsize=12)
+        ax.grid(True)
+        st.pyplot(fig)
+        
+        # Explained variance
+        explained_variance = pca.explained_variance_ratio_
+        st.info(f"""
+        **Explained Variance:**
+        - **Principal Component 1:** {explained_variance[0]:.2%}
+        - **Principal Component 2:** {explained_variance[1]:.2%}
+        - **Total Variance Explained by 2 Components:** {sum(explained_variance):.2%}
+        """)
+        
+    else:
+        st.warning("Please select at least 2 features for PCA visualization.")
     # Deskripsi klaster
     st.subheader("Deskripsi Statistik per Klaster (Per Fitur)")
 
