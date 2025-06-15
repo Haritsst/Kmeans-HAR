@@ -101,9 +101,29 @@ if features:
         - **Principal Component 2:** {explained_variance[1]:.2%}
         - **Total Variance Explained by 2 Components:** {sum(explained_variance):.2%}
         """)
+        # --- Feature Contribution to Principal Components ---
+        st.subheader("Deskripsi Kontribusi Fitur pada Komponen Utama (PCA)")
+        
+        # Create a dataframe of the PCA loadings
+        loadings_df = pd.DataFrame(
+            pca.components_.T,  # Transpose the components to have features as rows
+            columns=['Principal Component 1', 'Principal Component 2'],
+            index=features
+        )
+        
+        st.markdown("Bobot (loadings) berikut menunjukkan seberapa kuat setiap fitur memengaruhi setiap komponen utama. **Nilai absolut yang lebih tinggi** berarti pengaruhnya lebih besar dalam mendefinisikan komponen tersebut.")
+        st.dataframe(loadings_df.style.background_gradient(cmap='viridis'))
+
+        # Add a heatmap for better visualization
+        st.markdown("#### Visualisasi Heatmap dari Bobot PCA")
+        fig_heatmap, ax_heatmap = plt.subplots(figsize=(8, 6))
+        sns.heatmap(loadings_df, annot=True, cmap='viridis', ax=ax_heatmap)
+        ax_heatmap.set_title("Feature Loadings for Principal Components")
+        st.pyplot(fig_heatmap)
         
     else:
         st.warning("Please select at least 2 features for PCA visualization.")
+        
     # Deskripsi klaster
     st.subheader("Deskripsi Statistik per Klaster (Per Fitur)")
 
