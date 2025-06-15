@@ -120,11 +120,6 @@ if features:
         )
         st.markdown("Bobot (loadings) berikut menunjukkan seberapa kuat setiap fitur memengaruhi setiap komponen utama. **Nilai absolut yang lebih tinggi** berarti pengaruhnya lebih besar.")
         st.dataframe(loadings_df.style.background_gradient(cmap='viridis'))
-
-        fig_heatmap, ax_heatmap = plt.subplots(figsize=(8, 6))
-        sns.heatmap(loadings_df, annot=True, cmap='viridis', ax=ax_heatmap)
-        ax_heatmap.set_title("Feature Loadings for Principal Components")
-        st.pyplot(fig_heatmap)
         
     # Case 3: Less than two features selected
     else:
