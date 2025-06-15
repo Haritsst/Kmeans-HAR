@@ -60,31 +60,42 @@ if features:
     # Tambahkan label klaster ke dataframe
     df["Cluster"] = clusters
 
-    # --- PCA Visualization Section ---
-    st.subheader("PCA Cluster Visualization")
-    if len(features) >= 2:
-        # Apply PCA to reduce dimensions to 2
+    # --- Dynamic Visualization Section ---
+    # Case 1: Exactly two features are selected -> Use a standard scatter plot
+    if len(features) == 2:
+        st.subheader(f"Visualisasi Klaster: {features[0]} vs {features[1]}")
+        fig, ax = plt.subplots(figsize=(10, 8))
+        sns.scatterplot(
+            x=X_scaled[:, 0], 
+            y=X_scaled[:, 1], 
+            hue=clusters, 
+            palette="viridis", 
+            ax=ax,
+            s=100,
+            alpha=0.7
+        )
+        ax.set_title(f"Cluster Visualization: {features[0]} vs {features[1]}", fontsize=16)
+        ax.set_xlabel(f"Fitur: {features[0]} (Scaled)", fontsize=12)
+        ax.set_ylabel(f"Fitur: {features[1]} (Scaled)", fontsize=12)
+        ax.grid(True)
+        st.pyplot(fig)
+
+    # Case 2: More than two features are selected -> Use PCA
+    elif len(features) > 2:
+        st.subheader("Visualisasi Klaster dengan PCA")
         pca = PCA(n_components=2)
         principal_components = pca.fit_transform(X_scaled)
         
-        # Create a DataFrame for the principal components for easy plotting
         pca_df = pd.DataFrame(
             data=principal_components, 
             columns=['Principal Component 1', 'Principal Component 2']
         )
         pca_df['Cluster'] = clusters
 
-        # Create the scatter plot
         fig, ax = plt.subplots(figsize=(10, 8))
         sns.scatterplot(
-            x='Principal Component 1', 
-            y='Principal Component 2', 
-            hue='Cluster', 
-            palette="viridis", 
-            data=pca_df, 
-            ax=ax,
-            s=100, # Increase point size
-            alpha=0.7 # Add transparency
+            x='Principal Component 1', y='Principal Component 2', hue='Cluster', 
+            palette="viridis", data=pca_df, ax=ax, s=100, alpha=0.7
         )
         
         ax.set_title("Cluster Visualization with PCA", fontsize=16)
@@ -93,7 +104,6 @@ if features:
         ax.grid(True)
         st.pyplot(fig)
         
-        # Explained variance
         explained_variance = pca.explained_variance_ratio_
         st.info(f"""
         **Explained Variance:**
@@ -101,6 +111,7 @@ if features:
         - **Principal Component 2:** {explained_variance[1]:.2%}
         - **Total Variance Explained by 2 Components:** {sum(explained_variance):.2%}
         """)
+        
         # --- Feature Contribution to Principal Components ---
         st.subheader("Deskripsi Kontribusi Fitur pada Komponen Utama (PCA)")
         
