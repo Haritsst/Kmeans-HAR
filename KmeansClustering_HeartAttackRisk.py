@@ -113,13 +113,6 @@ if features:
         
         st.markdown("Bobot (loadings) berikut menunjukkan seberapa kuat setiap fitur memengaruhi setiap komponen utama. **Nilai absolut yang lebih tinggi** berarti pengaruhnya lebih besar dalam mendefinisikan komponen tersebut.")
         st.dataframe(loadings_df.style.background_gradient(cmap='viridis'))
-
-        # Add a heatmap for better visualization
-        st.markdown("#### Visualisasi Heatmap dari Bobot PCA")
-        fig_heatmap, ax_heatmap = plt.subplots(figsize=(8, 6))
-        sns.heatmap(loadings_df, annot=True, cmap='viridis', ax=ax_heatmap)
-        ax_heatmap.set_title("Feature Loadings for Principal Components")
-        st.pyplot(fig_heatmap)
         
     else:
         st.warning("Please select at least 2 features for PCA visualization.")
