@@ -60,8 +60,7 @@ if features:
     # Tambahkan label klaster ke dataframe
     df["Cluster"] = clusters
 
-    # --- Dynamic Visualization Section ---
-    # Case 1: Exactly two features are selected -> Use a standard scatter plot
+    #Dynamic Visualization Section 
     if len(features) == 2:
         st.subheader(f"Visualisasi Klaster: {features[0]} vs {features[1]}")
         fig, ax = plt.subplots(figsize=(10, 8))
@@ -80,7 +79,6 @@ if features:
         ax.grid(True)
         st.pyplot(fig)
 
-    # Case 2: More than two features are selected -> Use PCA
     elif len(features) > 2:
         st.subheader("Visualisasi Klaster dengan PCA")
         pca = PCA(n_components=2)
