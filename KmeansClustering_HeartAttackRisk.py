@@ -118,7 +118,7 @@ if features:
             columns=['Principal Component 1', 'Principal Component 2'],
             index=features
         )
-        st.markdown("Bobot (loadings) berikut menunjukkan seberapa kuat setiap fitur memengaruhi setiap komponen utama. **Nilai absolut yang lebih tinggi** berarti pengaruhnya lebih besar.")
+        st.markdown("Bobot berikut menunjukkan seberapa kuat setiap fitur memengaruhi setiap komponen utama. **Semakin Besar Nilainya** berarti pengaruhnya lebih besar.")
         st.dataframe(loadings_df.style.background_gradient(cmap='viridis'))
         
     # Case 3: Less than two features selected
